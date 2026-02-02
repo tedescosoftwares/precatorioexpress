@@ -10,6 +10,32 @@
 
   gtag('config', 'AW-17851765256');
 </script>
+
+<script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+
+    // protege caso gtag ainda não exista por algum motivo
+    if (typeof gtag !== 'function') return true;
+
+    gtag('event', 'conversion', {
+      'send_to': 'AW-17851765256/mKnpCJj1xNwbEIikscBC',
+      'value': 1.0,
+      'currency': 'BRL',
+      'transaction_id': '',
+      'event_callback': callback,
+      'transport_type': 'beacon'
+    });
+
+    return false;
+  }
+</script>
+
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PrecatórioExpress | Antecipe seu precatório em até 48h</title>
@@ -1645,6 +1671,7 @@
     // Form submission
     document.getElementById('contactForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+
       
       const formData = new FormData(this);
       const data = {
@@ -1681,12 +1708,15 @@
           })
         });
 
-        if (response.ok) {
-          alert('✅ Proposta enviada com sucesso! Entraremos em contato em breve.');
-          form.reset();
-        } else {
-          throw new Error('Erro no envio');
-        }
+      if (response.ok) {
+  // ✅ Converte só quando deu certo (recomendado)
+  gtag_report_conversion();
+
+  alert('✅ Proposta enviada com sucesso! Entraremos em contato em breve.');
+  form.reset();
+} else {
+  throw new Error('Erro no envio');
+}
       } catch (error) {
         // Fallback: abre o email client
         const subject = encodeURIComponent('Nova Solicitação - PrecatórioExpress');
